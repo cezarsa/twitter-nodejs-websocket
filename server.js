@@ -13,7 +13,7 @@ if (!USERNAME || !PASSWORD)
   return sys.puts("Usage: node server.js <twitter_username> <twitter_password> <keyword>");
 
 // Authentication Headers for Twitter
-var headers = [];
+var headers = {};
 var auth = base64.encode(USERNAME + ':' + PASSWORD);
 headers['Authorization'] = "Basic " + auth;
 headers['Host'] = "stream.twitter.com";
@@ -25,7 +25,7 @@ var twitter = http.createClient(80, "stream.twitter.com");
 var request = twitter.request("GET", "/1/statuses/filter.json?track=" + KEYWORD, headers);
 
 request.addListener('response', function (response) {
-  response.setBodyEncoding("utf8");
+  response.setEncoding("utf8");
   response.addListener("data", function (chunk) {
     // Send response to all connected clients
     clients.each(function(c) {
